@@ -10,3 +10,9 @@ class CreateEmployeeView(generics.CreateAPIView):
     permission_classes = ()
 
 # Create your views here.
+
+class CreateTokenView(ObtainAuthToken):
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+    serializer_class = AuthTokenSerializer
+
+
