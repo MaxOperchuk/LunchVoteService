@@ -11,5 +11,28 @@ class Restaurant(models.Model):
         return self.name
 
 
+class Menu(models.Model):
+    """Menu model."""
 
-# Create your models here.
+    restaurant = models.ForeignKey(
+        Restaurant,
+        on_delete=models.CASCADE,
+        related_name="menus",
+    )
+    date = models.DateField(auto_now_add=True)
+    items = models.JSONField()
+
+    class Meta:
+        ordering = ["-date"]
+        constraints = [
+            UniqueConstraint(
+                fields=[
+                    "restaurant",
+                    "date",
+                ],
+                name="unique_restaurant_date",
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.restaurant} - {self.date}"
