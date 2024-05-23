@@ -16,11 +16,34 @@ class VoteViewSet(GenericViewSet, mixins.CreateModelMixin, mixins.ListModelMixin
     permission_classes = (IsAuthenticated,)
 
     def get_serializer_class(self):
-        
+
         if self.action == "create":
             return VoteCreateSerializer
 
         return self.serializer_class
 
 
-# Create your views here.
+class CurrentDayResultsView(APIView):
+
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, *args, **kwargs):
+        today = timezone.now().date()
+        votes = Vote.objects.filter(menu__date=today)
+
+        results = {}
+
+        for vote in votes:
+
+            menu_key = (
+                f"Restaurant - {vote.menu.restaurant.name},"
+                f" menu id - {vote.menu.id}"
+            )
+
+            if menu_key in results:
+                results[menu_key] += 1
+
+            else:
+                results[menu_key] = 1
+
+        return Response(results, status=status.HTTP_200_OK)
