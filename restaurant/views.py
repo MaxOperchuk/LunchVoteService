@@ -32,5 +32,15 @@ class MenuCreateView(generics.CreateAPIView):
         return self.serializer_class
 
 
+class CurrentDayMenuView(APIView):
+    permission_classes = (IsAuthenticated,)
 
 # Create your views here.
+    def get(self, request, *args, **kwargs):
+        today = timezone.now().date()
+        menus = Menu.objects.filter(date=today)
+        serializer = MenuSerializer(menus, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
