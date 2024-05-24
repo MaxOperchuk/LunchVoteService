@@ -1,6 +1,5 @@
 from django.utils import timezone
 from rest_framework import status, mixins
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
@@ -13,7 +12,6 @@ class VoteViewSet(GenericViewSet, mixins.CreateModelMixin, mixins.ListModelMixin
 
     queryset = Vote.objects.select_related("employee", "menu")
     serializer_class = VoteSerializer
-    permission_classes = (IsAuthenticated,)
 
     def get_serializer_class(self):
 
@@ -25,11 +23,9 @@ class VoteViewSet(GenericViewSet, mixins.CreateModelMixin, mixins.ListModelMixin
 
 class CurrentDayResultsView(APIView):
 
-    permission_classes = (IsAuthenticated,)
-
     def get(self, request, *args, **kwargs):
         today = timezone.now().date()
-        votes = Vote.objects.filter(menu__date=today)
+        votes = Vote.objects.filter(voted_at=today)
 
         results = {}
 
