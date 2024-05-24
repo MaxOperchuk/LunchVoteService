@@ -10,7 +10,7 @@ urlpatterns = [
     path(
         "",
         RestaurantListCreateView.as_view(),
-        name="restaurant-list",
+        name="restaurant-list-create",
     ),
     path(
         "menus/",
