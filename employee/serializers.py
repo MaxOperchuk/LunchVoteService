@@ -4,6 +4,7 @@ from django.utils.translation import gettext as _
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = get_user_model()
         fields = ("id", "email", "password", "is_staff")
@@ -26,6 +27,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
 
 class AuthTokenSerializer(serializers.Serializer):
+
     email = serializers.EmailField(label=_("Email"))
     password = serializers.CharField(
         label=_("Password"), style={"input_type": "password"}
