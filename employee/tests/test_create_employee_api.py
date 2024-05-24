@@ -26,3 +26,14 @@ class RegisterApiTest(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
+    def test_employee_register_with_incorrect_data(self):
+        """Test employee registration with incorrect data"""
+
+        payload = {
+            "username": "test",
+            "password": "test12345"
+        }
+
+        res = self.client.post(REGISTER_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
