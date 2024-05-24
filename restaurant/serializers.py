@@ -1,7 +1,7 @@
 from django.db import transaction
 from rest_framework import serializers
 
-from restaurant.models import Restaurant, Menu
+from restaurant.models import Restaurant, Menu, Dish
 
 
 class RestaurantSerializer(serializers.ModelSerializer):
@@ -15,7 +15,21 @@ class RestaurantSerializer(serializers.ModelSerializer):
         read_only_fields = ("id",)
 
 
+class DishSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dish
+        fields = (
+            "id",
+            "name",
+            "price",
+            "weight",
+        )
+        read_only_fields = ("id",)
+
+
 class MenuSerializer(serializers.ModelSerializer):
+
+    dishes = DishSerializer(many=True, read_only=True)
 
     restaurant = serializers.CharField(
         source="restaurant.name",
@@ -28,7 +42,7 @@ class MenuSerializer(serializers.ModelSerializer):
             "id",
             "restaurant",
             "date",
-            "items",
+            "dishes",
         )
         read_only_fields = (
             "id",
@@ -42,9 +56,17 @@ class MenuCreateSerializer(serializers.ModelSerializer):
         source="restaurant.name",
         read_only=True,
     )
+
     restaurant_id = serializers.PrimaryKeyRelatedField(
         queryset=Restaurant.objects.all(),
         source="restaurant",
+        write_only=True,
+    )
+
+    dishes_id = serializers.PrimaryKeyRelatedField(
+        queryset=Dish.objects.all(),
+        source="dishes",
+        many=True,
         write_only=True,
     )
 
@@ -55,7 +77,7 @@ class MenuCreateSerializer(serializers.ModelSerializer):
             "restaurant",
             "restaurant_id",
             "date",
-            "items",
+            "dishes_id",
         )
         read_only_fields = (
             "id",
@@ -70,9 +92,17 @@ class MenuCreateSerializer(serializers.ModelSerializer):
            It retrieves the associated Restaurant instance from the validated data,
            creates a new Menu object, and returns it.
         """
-
         with transaction.atomic():
+
             restaurant = validated_data.pop("restaurant")
             restaurant = Restaurant.objects.get(id=restaurant.id)
+
+            dishes_data = validated_data.pop("dishes")
+
             menu = Menu.objects.create(restaurant=restaurant, **validated_data)
+
+            for dish_data in dishes_data:
+                dish = Dish.objects.get(id=dish_data.id)
+                menu.dishes.add(dish)
+
             return menu
