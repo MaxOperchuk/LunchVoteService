@@ -15,6 +15,18 @@ class RestaurantSerializer(serializers.ModelSerializer):
         read_only_fields = ("id",)
 
 
+class DishSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dish
+        fields = (
+            "id",
+            "name",
+            "price",
+            "weight",
+        )
+        read_only_fields = ("id",)
+
+
 class MenuSerializer(serializers.ModelSerializer):
 
     restaurant = serializers.CharField(
