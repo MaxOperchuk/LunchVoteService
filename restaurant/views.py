@@ -1,13 +1,14 @@
 from django.utils import timezone
-from rest_framework import generics, status, mixins
+from rest_framework import generics, status, mixins, viewsets
 from rest_framework.response import Response
 
-from restaurant.models import Restaurant, Menu
+
+from restaurant.models import Restaurant, Menu, Dish
 
 from restaurant.serializers import (
     RestaurantSerializer,
     MenuSerializer,
-    MenuCreateSerializer,
+    MenuCreateSerializer, DishSerializer,
 )
 
 
@@ -15,6 +16,12 @@ class RestaurantListCreateView(generics.ListCreateAPIView):
 
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
+
+
+class DishListCreateView(generics.ListCreateAPIView):
+
+    queryset = Dish.objects.all()
+    serializer_class = DishSerializer
 
 
 class MenuListCreateView(
@@ -33,7 +40,7 @@ class MenuListCreateView(
 
     def get(self, request, *args, **kwargs):
         today = timezone.now().date()
-        menus = Menu.objects.filter(date=today)
+        menus = Menu.objects.filter(date=today).prefetch_related("dishes")
         serializer = self.get_serializer(menus, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
