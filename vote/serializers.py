@@ -7,8 +7,10 @@ from restaurant.models import Menu
 from vote.models import Vote
 
 
+TODAY = timezone.now().date()
+
+
 class VoteSerializer(serializers.ModelSerializer):
-    """Vote serializer."""
 
     employee = serializers.CharField(
         source="employee.email",
@@ -31,7 +33,6 @@ class VoteSerializer(serializers.ModelSerializer):
 
 
 class VoteCreateSerializer(VoteSerializer):
-    """Vote create serializer."""
 
     employee = serializers.CharField(
         source="employee.email",
@@ -39,7 +40,7 @@ class VoteCreateSerializer(VoteSerializer):
     )
 
     menu_id = serializers.PrimaryKeyRelatedField(
-        queryset=Menu.objects.all(),
+        queryset=Menu.objects.filter(date=TODAY),
         source="menu",
         write_only=True,
     )
@@ -80,11 +81,9 @@ class VoteCreateSerializer(VoteSerializer):
 
         data = super(VoteSerializer, self).validate(attrs=attrs)
         employee = self.context["request"].user
-        menu = attrs["menu"]
-        today = timezone.now().date()
 
         if Vote.objects.filter(
-                employee_id=employee.id, voted_at=today
+                employee_id=employee.id, voted_at=TODAY
         ).exists():
 
             raise serializers.ValidationError(
