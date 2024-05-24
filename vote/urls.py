@@ -5,7 +5,7 @@ from vote.views import VoteViewSet, CurrentDayResultsView
 
 
 router = routers.DefaultRouter()
-router.register("votes", VoteViewSet)
+router.register("", VoteViewSet)
 
 
 urlpatterns = [

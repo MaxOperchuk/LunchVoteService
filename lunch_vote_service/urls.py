@@ -21,16 +21,16 @@ from django.urls import path, include
 urlpatterns = [
     path("admin/", admin.site.urls),
     path(
-        "api/restaurant/",
+        "api/restaurants/",
         include("restaurant.urls", namespace="restaurant")
     ),
 
     path(
-        "api/vote/",
+        "api/votes/",
         include("vote.urls", namespace="vote")
     ),
     path(
-        "api/employee/",
+        "api/employees/",
         include("employee.urls", namespace="employee")
     ),
     path("__debug__/", include("debug_toolbar.urls")),

@@ -8,11 +8,15 @@ from restaurant.views import (
 
 urlpatterns = [
     path(
-        "restaurants/",
+        "",
         RestaurantListCreateView.as_view(),
-        name="restaurant-list-create",
+        name="restaurant-list",
     ),
-    path("menus/", MenuListCreateView.as_view(), name="menu-list-create"),
+    path(
+        "menus/",
+        MenuListCreateView.as_view(),
+        name="menu-list-create",
+    ),
 ]
 
 app_name = "restaurant"
