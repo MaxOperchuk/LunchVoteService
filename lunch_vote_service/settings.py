@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
+
 import os
 from datetime import timedelta
 from pathlib import Path
@@ -98,7 +99,7 @@ DATABASES = {
         "USER": os.environ["POSTGRES_USER"],
         "PASSWORD": os.environ["POSTGRES_PASSWORD"],
         "HOST": os.environ["POSTGRES_HOST"],
-        "PORT": os.environ["POSTGRES_PORT"]
+        "PORT": os.environ["POSTGRES_PORT"],
     }
 }
 
@@ -148,6 +149,10 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
+    "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.AcceptHeaderVersioning",
+    "DEFAULT_VERSION": "2.0",
+    "ALLOWED_VERSIONS": ["1.0", "2.0"],
+    "VERSION_PARAM": "version",
     "DEFAULT_PERMISSION_CLASSES": [
         "restaurant.permissions.IsAdminOrIfAuthenticatedReadOnly"
     ],
