@@ -43,7 +43,6 @@ class UserManager(BaseUserManager):
 
 
 class Employee(AbstractUser):
-    """Employee model."""
 
     username = None
     email = models.EmailField(_("email address"), unique=True)

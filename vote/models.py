@@ -5,7 +5,6 @@ from django.db.models import UniqueConstraint
 
 
 class Vote(models.Model):
-    """Vote model."""
 
     employee = models.ForeignKey(
         settings.AUTH_USER_MODEL,

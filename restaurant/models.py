@@ -3,7 +3,6 @@ from django.db.models import UniqueConstraint
 
 
 class Restaurant(models.Model):
-    """Restaurant model."""
 
     name = models.CharField(max_length=255)
 
@@ -12,7 +11,6 @@ class Restaurant(models.Model):
 
 
 class Menu(models.Model):
-    """Menu model."""
 
     restaurant = models.ForeignKey(
         Restaurant,
@@ -36,3 +34,5 @@ class Menu(models.Model):
 
     def __str__(self):
         return f"{self.restaurant} - {self.date}"
+
+
