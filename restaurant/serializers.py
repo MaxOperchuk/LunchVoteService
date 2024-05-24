@@ -5,7 +5,6 @@ from restaurant.models import Restaurant, Menu
 
 
 class RestaurantSerializer(serializers.ModelSerializer):
-    """Restaurant serializer."""
 
     class Meta:
         model = Restaurant
@@ -17,7 +16,6 @@ class RestaurantSerializer(serializers.ModelSerializer):
 
 
 class MenuSerializer(serializers.ModelSerializer):
-    """Menu serializer."""
 
     restaurant = serializers.CharField(
         source="restaurant.name",
@@ -39,7 +37,6 @@ class MenuSerializer(serializers.ModelSerializer):
 
 
 class MenuCreateSerializer(serializers.ModelSerializer):
-    """Menu create serializer."""
 
     restaurant = serializers.CharField(
         source="restaurant.name",
